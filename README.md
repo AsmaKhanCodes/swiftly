@@ -11,7 +11,16 @@
 
 **AI-powered local delivery comparison in seconds.**
 
-Swiftly lets customers compare local delivery companies side by side — prices, availability, estimated times, and coverage — then submit requests directly. No account required.
+Swiftly aggregates local delivery companies into a single comparison interface. Enter your pickup and destination, choose a category, and compare pricing, estimated times, and availability across multiple companies — no account required.
+
+---
+
+## Live Demo
+
+- **Live Application:** `https://your-vercel-url.vercel.app`
+- **GitHub Repository:** `https://github.com/your-username/swiftly`
+
+Open the live application in your browser — no installation or account needed.
 
 ---
 
@@ -27,7 +36,9 @@ In many cities, local delivery companies operate primarily through WhatsApp. Cus
 6. Manually compare prices, availability, and response times across scattered chat threads.
 7. Repeat until finding a suitable company.
 
-This wastes time, creates friction, and makes price comparison impractical. Customers often settle for the first company that replies rather than the best option.
+This wastes time, creates friction, and makes price comparison impractical. Customers often settle for the first company that replies rather than the best option. Small courier companies struggle to get discovered because there is no central directory.
+
+---
 
 ## Solution
 
@@ -35,9 +46,11 @@ Swiftly aggregates participating delivery companies into a single comparison int
 
 **This MVP demonstrates the concept with seeded demo companies** stored in Supabase. A production version would allow delivery companies to register themselves, manage their own pricing and availability, and receive requests through the platform.
 
+---
+
 ## Why Swiftly?
 
- Swiftly targets a different niche: **local courier companies** that already operate independently through WhatsApp.
+Most delivery applications represent a single company or marketplace with internal fleets. Swiftly targets a different niche: **local courier companies** that already operate independently through WhatsApp.
 
 | Problem | How Swiftly Helps |
 |---|---|
@@ -49,91 +62,7 @@ Swiftly aggregates participating delivery companies into a single comparison int
 
 Swiftly is a **marketplace**, not a delivery service. It connects customers with existing delivery companies and lets the customer choose.
 
-## MVP Scope
-
-### What's implemented today
-
-- Category-based comparison (Grocery, Medicine, Food Pickup, Parcel, Documents, Other)
-- Estimated fee and time calculation using configured pricing tables
-- Mock distance estimation (randomized 2–7 km range)
-- AI-powered recommendation with natural-language explanation (Gemini 2.0 Flash)
-- Delivery request submission with confirmation
-- Company dashboard: stats, request management, pricing editor, coverage area CRUD, availability toggle
-- Supabase authentication with auto-provisioning for demo accounts
-- Route protection via Next.js 16 proxy
-- Responsive, mobile-first design with WCAG AA accessibility
-
-### What a production version would include
-
-- **WhatsApp Business API** — submit requests directly via WhatsApp
-- **Live rider availability** — real-time driver status per company
-- **Real Google Maps distance calculation** — accurate fee and time estimates
-- **Online payments** — integrated Stripe checkout per request
-- **Company self-registration** — onboarding flow for new delivery businesses
-- **Customer accounts** — request history, saved locations, favorites
-- **Live tracking** — real-time delivery status updates
-
 ---
-
-## How Comparison Works
-
-**Step 1 — Filter companies** by delivery category and enter pickup/destination areas.
-
-**Step 2 — Calculate estimated fee** using the configured pricing for each company:
-
-```
-Estimated Fee = Base Fee + (Distance × Price per km)
-Estimated Time = Base Minutes + (Distance × 2)
-```
-
-Distance is calculated via a mock function (randomized 2–7 km in MVP). A production version would use the Google Maps Distance Matrix API.
-
-**Step 3 — Rank companies** by estimated fee (ascending). Results display company name, estimated fee, estimated time, coverage badge, and verification status.
-
-**Step 4 — Gemini explains the recommendation.** The backend scores each company algorithmically:
-
-| Factor | Weight |
-|---|---|
-| Normalized estimated fee | 40% |
-| Normalized estimated time | 30% |
-| Coverage area match | 20% |
-| Verification status | 10% |
-
-The highest-scoring company is selected as the recommendation. Gemini 2.0 Flash generates 2–3 sentences explaining *why* this company is the best option — mentioning specific advantages like lowest cost, fastest delivery, or area coverage. If the Gemini API key is not configured, a template explanation is used instead.
-
-**The backend calculates all pricing. Gemini only explains the recommendation.**
-
-## System Architecture
-
-```
-┌──────────┐
-│ Customer │  (No account required)
-└────┬─────┘
-     │
-     ▼
-┌──────────────────┐
-│  Next.js 16      │
-│  Frontend         │
-│  (App Router)    │
-└──────┬───────────┘
-       │
-       ▼
-┌──────────────────┐
-│  Next.js API     │
-│  Routes (13)     │
-└───┬──────────────┘
-    │
-    ├──────────────┐
-    │              │
-    ▼              ▼
-┌──────────┐ ┌──────────┐
-│ Supabase │ │ Gemini   │
-│ DB +     │ │ 2.0      │
-│ Auth     │ │ Flash    │
-└──────────┘ └──────────┘
-```
-
-The frontend communicates exclusively with Next.js API routes. API routes query Supabase for pricing, coverage, and company data. The recommendation route calls Gemini only for natural-language explanation — scoring and selection are computed server-side.
 
 ## Features
 
@@ -144,22 +73,22 @@ The frontend communicates exclusively with Next.js API routes. API routes query 
 - **Request submission** — Fill pickup location, shopping list, and phone; submit directly to the chosen company
 - **Confirmation page** — Track request ID after submission
 - **No account required** — Full comparison and request flow are anonymous
-- **About & Contact pages** — Project information and company contact details
+- **About & Contact pages** — Company information and contact details
 
 ### Company Features
 
 - **Dashboard** — Today's requests, pending count, completed count, availability toggle
-- **Request management** — Filter by status (All/Pending/Accepted/Completed) with accept/complete/cancel actions
+- **Request management** — Filter by status (All/Pending/Accepted/Completed) with accept, complete, and cancel actions
 - **Pricing editor** — Inline edit base fee, price per km, and estimated time per category; save changes per row
-- **Coverage area management** — Add and remove coverage areas
-- **Profile page** — Read-only company profile (MVP placeholder; editing is not yet implemented)
+- **Coverage area management** — Add and remove delivery coverage areas
+- **Profile page** — Read-only company profile (editing is not yet implemented)
 - **Authentication** — Login via Supabase Auth with auto-account provisioning from seed data
 
 ### AI Features
 
 - **Algorithmic scoring** — Fee (40%), time (30%), coverage (20%), verified status (10%)
 - **Gemini explanation** — Natural-language justification for the recommended company (model: `gemini-2.0-flash`)
-- **Graceful fallback** — Client-side template explanation used if Gemini API key is unset or the API call fails
+- **Graceful fallback** — Template explanation used if Gemini API key is unset or the call fails
 
 ### Platform Features
 
@@ -168,23 +97,7 @@ The frontend communicates exclusively with Next.js API routes. API routes query 
 - **Dark/light awareness** — CSS variables adapt to system color scheme
 - **Framer Motion animations** — Micro-interactions and page transitions
 - **Zod validation** — All API inputs validated server-side before processing
-- **Route protection** — Dashboard routes guarded via Next.js 16 proxy pattern
-
----
-
-## Tech Stack
-
-| Technology | Why It Was Chosen |
-|---|---|
-| **Next.js 16** (App Router) | React framework with server components, API routes, and Turbopack for fast development. The App Router supports route groups and layouts that match our page structure naturally. |
-| **TypeScript** | Type safety across the full stack — database queries, API responses, component props, and Zod schemas share consistent types. |
-| **Tailwind CSS v4** | Utility-first CSS with the new `@theme inline` system. Zero runtime, small bundles, and rapid responsive design. |
-| **shadcn/ui** (base-nova) | Copy-paste UI components built on `@base-ui/react`. Accessible, unstyled primitives wrapped with Tailwind — no npm dependency on pre-built components. |
-| **Supabase** | PostgreSQL database with built-in authentication. The same platform handles schema, auth, and API queries. Free tier is generous for an MVP. |
-| **Gemini API** (`gemini-2.0-flash`) | Fast, cost-effective LLM for generating natural-language recommendation explanations. The model is called only after all calculations are done server-side. |
-| **React Hook Form + Zod** | Performant form handling with schema-based validation. Reduces re-renders and keeps validation logic in one place. |
-| **Framer Motion** | Lightweight animation library for page transitions, hover effects, and micro-interactions. |
-| **Lucide React** | Consistent, tree-shakeable icon set with first-class React support. |
+- **Route protection** — Company dashboard routes guarded via Next.js 16 proxy pattern
 
 ---
 
@@ -224,6 +137,148 @@ The frontend communicates exclusively with Next.js API routes. API routes query 
 
 ---
 
+## Tech Stack
+
+| Technology | Why It Was Chosen |
+|---|---|
+| **Next.js 16** (App Router) | React framework with server components, API routes, and Turbopack for fast development. App Router route groups match our page structure naturally. |
+| **TypeScript** | Type safety across the full stack — database queries, API responses, component props, and Zod schemas share consistent types. |
+| **Tailwind CSS v4** | Utility-first CSS with the new `@theme inline` system. Zero runtime, small bundles, and rapid responsive design. |
+| **shadcn/ui** (base-nova) | Copy-paste UI components built on `@base-ui/react` and `@radix-ui/react`. Accessible, unstyled primitives wrapped with Tailwind — no npm dependency on pre-built components. |
+| **Supabase** | PostgreSQL database with built-in authentication. The same platform handles schema, auth, and API queries. Free tier is generous for an MVP. |
+| **Gemini API** (`gemini-2.0-flash`) | Fast, cost-effective LLM for generating natural-language recommendation explanations. Called only after all calculations are done server-side. |
+| **React Hook Form + Zod** | Performant form handling with schema-based validation. Reduces re-renders and keeps validation logic in one place. |
+| **Framer Motion** | Lightweight animation library for page transitions, hover effects, and micro-interactions. |
+| **Lucide React** | Consistent, tree-shakeable icon set with first-class React support. |
+
+---
+
+## System Architecture
+
+```
+┌──────────┐
+│ Customer │  (No account required)
+└────┬─────┘
+     │
+     ▼
+┌──────────────────────┐
+│  Next.js 16          │
+│  Frontend            │
+│  (App Router)        │
+└──────┬───────────────┘
+       │
+       ▼
+┌──────────────────────┐
+│  Next.js API Routes  │
+│  (10 route handlers) │
+└───┬──────────────────┘
+    │
+    ├────────────────┐
+    │                │
+    ▼                ▼
+┌──────────┐   ┌──────────┐
+│ Supabase │   │ Gemini   │
+│ DB +     │   │ 2.0      │
+│ Auth     │   │ Flash    │
+└──────────┘   └──────────┘
+```
+
+The frontend communicates exclusively with Next.js API routes. API routes query Supabase for pricing, coverage, and company data. The recommendation route calls Gemini only for natural-language explanation — scoring and selection are computed server-side.
+
+---
+
+## How It Works
+
+### Customer Journey
+
+1. **Browse categories** on the landing page or go directly to `/compare`.
+2. **Select a delivery category** (Grocery, Medicine, Food Pickup, Parcel, Documents, Other).
+3. **Enter pickup and destination** areas.
+4. **Compare results** — cards display each company's estimated fee, estimated time, coverage badge, and verification status, sorted by price ascending.
+5. **View the AI recommendation** — the top pick is highlighted with an explanation.
+6. **Select a company** and fill in the request form (shopping list, notes, phone number).
+7. **Submit the request** — the company receives it in their dashboard.
+8. **Confirmation page** displays the request ID and next steps (the company will contact the customer via phone).
+
+### Company Dashboard
+
+Companies log in at `/company/login` to access their management portal:
+
+- **Dashboard** — Overview of today's requests, pending count, completed count, and an availability toggle
+- **Requests** — View and manage incoming delivery requests (accept, complete, or cancel)
+- **Pricing** — Edit base fee, price per km, and estimated time per delivery category
+- **Coverage** — Add or remove delivery coverage areas
+- **Profile** — Read-only company information (editing coming in a future release)
+
+### Comparison & Pricing
+
+When a customer initiates a comparison, the backend:
+
+1. Fetches all pricing rows for the selected category, joined with company data
+2. Calculates estimated fees and times using:
+
+```
+Estimated Fee   = Base Fee + (Distance × Price per km)
+Estimated Time  = Base Minutes + (Distance × 2)
+```
+
+3. Filters to available companies only
+4. Sorts results by estimated fee ascending
+
+Distance is currently simulated (randomized 2–7 km). A production version would use the Google Maps Distance Matrix API for accurate calculations.
+
+---
+
+## AI Recommendation Engine
+
+The AI recommendation follows a strict separation of concerns:
+
+**Backend calculation (always runs):**
+- Scores each company using a weighted formula
+- Fee score (40% weight) — normalized across all results
+- Time score (30% weight) — normalized across all results
+- Coverage bonus (20% weight) — awarded if the company covers the customer's area
+- Verification bonus (10% weight) — awarded if the company is verified
+
+**Gemini explanation (optional):**
+- The highest-scoring company is selected algorithmically
+- Gemini 2.0 Flash receives the best company and all result data
+- It generates 2–3 sentences explaining *why* this company is the best option
+- If the Gemini API key is not configured, a template explanation is used instead
+
+**The backend calculates all pricing and scoring. Gemini only explains the recommendation.**
+
+---
+
+## MVP Scope
+
+### What's Implemented Today
+
+- Category-based comparison (Grocery, Medicine, Food Pickup, Parcel, Documents, Other)
+- Estimated fee and time calculation using configured pricing tables
+- Mock distance estimation (randomized 2–7 km range)
+- AI-powered recommendation with Gemini-generated explanation
+- Delivery request submission with confirmation page
+- Company dashboard: stats, request management, pricing editor, coverage area CRUD, availability toggle
+- Supabase authentication with auto-provisioning for demo accounts
+- Route protection via Next.js 16 proxy pattern
+- Responsive, mobile-first design with WCAG AA accessibility
+
+### What Belongs to the Production Roadmap
+
+- **Company self-registration** — onboarding flow for new delivery businesses
+- **WhatsApp Business API** — submit requests and receive status updates via WhatsApp
+- **Live rider availability** — real-time driver status per company
+- **Google Maps Distance Matrix API** — accurate distance and duration for fee calculation
+- **Online payments** — integrated checkout per request
+- **Customer accounts** — request history, saved locations, favorite companies
+- **Push notifications** — alert companies of new requests and customers of status changes
+- **Analytics dashboard** — request volume, revenue trends, peak hours, customer locations
+- **Ratings & Reviews** — post-delivery feedback visible on company profiles
+- **GPS live tracking** — real-time rider location during delivery
+
+---
+
 ## Getting Started
 
 ### Prerequisites
@@ -231,7 +286,7 @@ The frontend communicates exclusively with Next.js API routes. API routes query 
 - Node.js 20.9+
 - npm 10+
 - A Supabase project (free tier)
-- A Google Gemini API key (free tier)
+- A Google Gemini API key (free tier, optional)
 
 ### Installation
 
@@ -259,10 +314,10 @@ cp .env.local.example .env.local
 ### Database Setup
 
 1. Create a Supabase project at [supabase.com](https://supabase.com).
-2. Open the SQL Editor and run `supabase/schema.sql` to create the five tables (companies, coverage_areas, pricing, delivery_requests, company_users) with triggers and indexes.
+2. Open the SQL Editor and run `supabase/schema.sql` to create all tables, triggers, and indexes.
 3. Run `supabase/seed.sql` to populate demo companies, pricing, coverage areas, and company user records.
 
-**Important:** The `seed.sql` file inserts company user records into the `company_users` table for reference, but it does **not** create Supabase Authentication users. Authentication accounts are created automatically on first login via the `/api/auth/login` route, which uses the `SUPABASE_SERVICE_ROLE_KEY` to provision users through the Supabase Admin API. The seed data table provides the email addresses and metadata needed for this auto-provisioning.
+**Important:** The `seed.sql` file inserts company user records into the `company_users` table for reference, but it does **not** create Supabase Authentication users. Authentication accounts are created automatically on first login via the `/api/auth/login` route, which uses the `SUPABASE_SERVICE_ROLE_KEY` to provision users through the Supabase Admin API.
 
 ### Demo Credentials
 
@@ -285,7 +340,7 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000).
 
-### Build & Production
+### Production Build
 
 ```bash
 npm run build
@@ -296,70 +351,21 @@ npm start
 
 ## Deployment
 
-### Vercel (Recommended)
+The application is designed for deployment on Vercel. Set the environment variables listed above in your Vercel project settings.
 
-```bash
-npm install -g vercel
-vercel
-```
-
-Set the following environment variables in the Vercel dashboard (Settings → Environment Variables):
-
-- `NEXT_PUBLIC_SUPABASE_URL`
-- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `GEMINI_API_KEY`
-
-The project uses `next build` as the build command, which Vercel detects automatically. Ensure your Supabase project's IP restrictions (if any) allow inbound requests from Vercel's deployment regions.
-
----
-
-## Project Structure
-
-```
-src/
-├── app/
-│   ├── (landing)/          # Landing, about, contact pages — public consumer site
-│   ├── (compare)/          # Comparison flow: compare, request form, confirmation
-│   ├── (company)/          # Company dashboard: layout with auth check + sidebar
-│   ├── company/login/      # Branded split-screen login page (public)
-│   └── api/                # 13 API route handlers for comparison, auth, company operations
-├── components/
-│   ├── layout/             # Navbar, footer, company sidebar — shared across route groups
-│   ├── shared/             # EmptyState, PageHeader — reusable content components
-│   └── ui/                 # shadcn/ui primitives (button, card, dialog, input, select, etc.)
-├── lib/
-│   ├── supabase/           # Browser and server Supabase client factories
-│   ├── gemini.ts           # Gemini AI recommendation engine with fallback
-│   ├── pricing-calculator.ts  # Fee and time estimation formulas
-│   ├── distance.ts         # Mock distance calculator (MVP: random 2–7 km)
-│   └── utils.ts            # cn() utility for conditional Tailwind class merging
-├── types/                  # TypeScript interfaces for companies, pricing, requests, API responses
-├── validations/            # Zod schemas for compare, request, login, and pricing update inputs
-├── proxy.ts                # Next.js 16 middleware replacement — guards /company/* routes
-├── hooks/                  # (Available for custom React hooks)
-└── services/               # (Available for service-layer abstractions)
-```
-
-Key design decisions:
-
-- **Route groups** (`(landing)`, `(compare)`, `(company)`) organize pages by consumer journey without affecting URL paths.
-- **API routes** are organized by resource (`/api/company/*`, `/api/auth/*`), with a flat `/api/` for public endpoints.
-- **The proxy pattern** (`proxy.ts`) replaces `middleware.ts` from earlier Next.js versions, matching Next.js 16's breaking change.
-- **Empty directories** (`hooks/`, `services/`, `features/`) are scaffolding for future iterations.
+**Live Application:** `https://your-vercel-url.vercel.app`
 
 ---
 
 ## Roadmap
 
-- [ ] **Company self-registration** — Onboarding flow with invite codes or public signup
+- [ ] **Company self-registration** — Onboarding flow with public signup for delivery businesses
 - [ ] **WhatsApp Business API** — Send request submissions and status updates via WhatsApp
 - [ ] **Live rider availability** — Real-time toggle per rider, not just per company
 - [ ] **Google Maps Distance Matrix API** — Accurate distance and duration for fee calculation
 - [ ] **Push notifications** — Alert companies of new requests and customers of status changes
-- [ ] **Online payments (Stripe)** — Pay per request with escrow-style release on completion
+- [ ] **Online payments** — Pay per request with escrow-style release on completion
 - [ ] **Analytics dashboard** — Request volume, revenue trends, peak hours, customer locations
-- [ ] **Rider mobile application** — Dedicated app for delivery personnel
 - [ ] **Customer accounts** — Request history, saved addresses, favorite companies
 - [ ] **Reviews and ratings** — Post-delivery feedback visible on company profiles
 - [ ] **Multi-language support** — i18n for customer and company interfaces
@@ -381,10 +387,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 ## Acknowledgements
 
-- **Supabase** — PostgreSQL database and authentication platform
+- **Next.js** — React framework and App Router architecture
+- **Supabase** — PostgreSQL database, authentication, and hosting infrastructure
 - **Google Gemini** — AI language model for recommendation explanations
 - **shadcn/ui** — Accessible component system and design patterns
-- **Vercel** — Next.js framework and deployment platform
+- **Framer Motion** — Motion library for React animations
 - **Lucide** — Open-source icon set
-- **Framer Motion** — Motion library for React
-- All demo delivery companies (QuickDash, GoParcel, MediExpress, FreshCart, FoodRush, SwiftCourier) — placeholder brands for MVP demonstration
+- **Radix UI** — Unstyled, accessible UI primitives
+- **React Hook Form** — Performant form management
+- **Zod** — TypeScript-first schema validation
