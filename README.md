@@ -353,7 +353,7 @@ npm start
 
 The application is designed for deployment on Vercel. Set the environment variables listed above in your Vercel project settings.
 
-**Live Application:** `https://your-vercel-url.vercel.app`
+**Live Application:** `https://swiftly-amber.vercel.app/`
 
 ---
 
