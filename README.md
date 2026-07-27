@@ -37,7 +37,7 @@ Swiftly aggregates participating delivery companies into a single comparison int
 
 ## Why Swiftly?
 
-Existing food delivery apps (Uber Eats, Deliveroo, etc.) are restaurant-focused. They serve a single marketplace with a fixed set of drivers. Swiftly targets a different niche: **local courier companies** that already operate independently through WhatsApp.
+ Swiftly targets a different niche: **local courier companies** that already operate independently through WhatsApp.
 
 | Problem | How Swiftly Helps |
 |---|---|
