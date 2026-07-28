@@ -384,7 +384,7 @@ cp .env.local.example .env.local
 | `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL |
 | `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | Supabase anon / publishable key |
 | `SUPABASE_SERVICE_ROLE_KEY` | Supabase service role key (used to auto-create auth users on first login) |
-| `GEMINI_API_KEY` | Google Gemini API key (optional — recommendations work with fallback text without it) |
+| `GEMINI_API_KEY` | Google Gemini API key|
 
 ### Database Setup
 
