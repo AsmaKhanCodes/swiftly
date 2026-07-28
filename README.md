@@ -144,7 +144,7 @@ Swiftly connects customers with local courier companies through a fast, anonymou
 
 ## Screenshots
 
-> Placeholder references — add actual screenshots to `docs/screenshots/` once deployed to a live environment.
+
 
 ![Landing Page](docs/screenshots/landing-page.png)
 
