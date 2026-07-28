@@ -35,9 +35,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 })
   }
 
-  if (!pricing || pricing.length === 0) {
-    return NextResponse.json({ results: [], distance: distanceResult })
-  }
+  return NextResponse.json({
+  pricingCount: pricing?.length,
+  pricing,
+  error,
+})
 
   const results: CompareResult[] = pricing
     .filter((p: any) => p.company)

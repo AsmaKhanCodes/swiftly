@@ -1,9 +1,10 @@
 <p align="center">
-  <img src="https://img.shields.io/badge/Next.js-16.2-000000?logo=next.js&logoColor=white" alt="Next.js 16">
-  <img src="https://img.shields.io/badge/TypeScript-5-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
-  <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS v4">
+  <img src="https://img.shields.io/badge/Next.js_16-000000?logo=next.js&logoColor=white" alt="Next.js 16">
+  <img src="https://img.shields.io/badge/TypeScript_5-3178C6?logo=typescript&logoColor=white" alt="TypeScript 5">
+  <img src="https://img.shields.io/badge/Tailwind_CSS_v4-06B6D4?logo=tailwindcss&logoColor=white" alt="Tailwind CSS v4">
   <img src="https://img.shields.io/badge/Supabase-FF3E00?logo=supabase&logoColor=white" alt="Supabase">
-  <img src="https://img.shields.io/badge/Gemini-8E75B2?logo=googlegemini&logoColor=white" alt="Gemini API">
+  <img src="https://img.shields.io/badge/Gemini_2.0_Flash-8E75B2?logo=googlegemini&logoColor=white" alt="Gemini 2.0 Flash">
+  <img src="https://img.shields.io/badge/shadcn/ui_%2F_base--ui-4F46E5" alt="shadcn/ui + base-ui">
   <img src="https://img.shields.io/badge/license-MIT-blue" alt="MIT License">
 </p>
 
@@ -15,12 +16,46 @@ Swiftly aggregates local delivery companies into a single comparison interface. 
 
 ---
 
+## Table of Contents
+
+- [Live Demo](#live-demo)
+- [Problem](#problem)
+- [Solution](#solution)
+- [Why Swiftly?](#why-swiftly)
+- [Features](#features)
+- [Project Preview](#project-preview)
+- [Screenshots](#screenshots)
+- [Tech Stack](#tech-stack)
+- [System Architecture](#system-architecture)
+- [How It Works](#how-it-works)
+- [AI Recommendation Engine](#ai-recommendation-engine)
+  - [Scoring Formula](#scoring-formula)
+  - [Gemini Integration](#gemini-integration)
+  - [AI System Prompt](#ai-system-prompt)
+- [MVP Scope](#mvp-scope)
+- [Production Roadmap](#production-roadmap)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Environment Variables](#environment-variables)
+  - [Database Setup](#database-setup)
+  - [Demo Credentials](#demo-credentials)
+  - [Development](#development)
+  - [Production Build](#production-build)
+- [Deployment](#deployment)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
+
+---
+
 ## Live Demo
 
-- **Live Application:** `https://your-vercel-url.vercel.app`
-- **GitHub Repository:** `https://github.com/your-username/swiftly`
+**[swiftly-amber.vercel.app](https://swiftly-amber.vercel.app/)**
 
-Open the live application in your browser — no installation or account needed.
+Open the live application in your browser — no installation or account required.
+
+- **Live Application:** [https://swiftly-amber.vercel.app/](https://swiftly-amber.vercel.app/)
+- **GitHub Repository:** [https://github.com/AsmaKhanCodes/swiftly](https://github.com/AsmaKhanCodes/swiftly)
 
 ---
 
@@ -28,13 +63,13 @@ Open the live application in your browser — no installation or account needed.
 
 In many cities, local delivery companies operate primarily through WhatsApp. Customers face a repetitive manual workflow:
 
-1. Open WhatsApp.
-2. Message Company A: *"Are riders available? How much to deliver from X to Y?"*
-3. Wait for a reply.
-4. Message Company B with the same question.
-5. Wait again.
-6. Manually compare prices, availability, and response times across scattered chat threads.
-7. Repeat until finding a suitable company.
+> 1. Open WhatsApp.
+> 2. Message Company A: *"Are riders available? How much to deliver from X to Y?"*
+> 3. Wait for a reply.
+> 4. Message Company B with the same question.
+> 5. Wait again.
+> 6. Manually compare prices, availability, and response times across scattered chat threads.
+> 7. Repeat until finding a suitable company.
 
 This wastes time, creates friction, and makes price comparison impractical. Customers often settle for the first company that replies rather than the best option. Small courier companies struggle to get discovered because there is no central directory.
 
@@ -44,7 +79,7 @@ This wastes time, creates friction, and makes price comparison impractical. Cust
 
 Swiftly aggregates participating delivery companies into a single comparison interface. Customers enter their pickup location, select a category, and instantly see side-by-side pricing, estimated times, and coverage across multiple companies.
 
-**This MVP demonstrates the concept with seeded demo companies** stored in Supabase. A production version would allow delivery companies to register themselves, manage their own pricing and availability, and receive requests through the platform.
+> **MVP note:** This demo uses seeded company data stored in Supabase. A production version would allow delivery companies to register themselves, manage their own pricing and availability, and receive requests through the platform.
 
 ---
 
@@ -78,7 +113,7 @@ Swiftly is a **marketplace**, not a delivery service. It connects customers with
 ### Company Features
 
 - **Dashboard** — Today's requests, pending count, completed count, availability toggle
-- **Request management** — Filter by status (All/Pending/Accepted/Completed) with accept, complete, and cancel actions
+- **Request management** — Filter by status (All / Pending / Accepted / Completed) with accept, complete, and cancel actions
 - **Pricing editor** — Inline edit base fee, price per km, and estimated time per category; save changes per row
 - **Coverage area management** — Add and remove delivery coverage areas
 - **Profile page** — Read-only company profile (editing is not yet implemented)
@@ -86,9 +121,9 @@ Swiftly is a **marketplace**, not a delivery service. It connects customers with
 
 ### AI Features
 
-- **Algorithmic scoring** — Fee (40%), time (30%), coverage (20%), verified status (10%)
+- **Algorithmic scoring** — Weighted formula: Fee (40%), Time (30%), Coverage (20%), Verified (10%) — computed server-side
 - **Gemini explanation** — Natural-language justification for the recommended company (model: `gemini-2.0-flash`)
-- **Graceful fallback** — Template explanation used if Gemini API key is unset or the call fails
+- **Graceful fallback** — Template explanation used if the Gemini API key is unset or the API call fails
 
 ### Platform Features
 
@@ -97,43 +132,39 @@ Swiftly is a **marketplace**, not a delivery service. It connects customers with
 - **Dark/light awareness** — CSS variables adapt to system color scheme
 - **Framer Motion animations** — Micro-interactions and page transitions
 - **Zod validation** — All API inputs validated server-side before processing
-- **Route protection** — Company dashboard routes guarded via Next.js 16 proxy pattern
+- **Route protection** — Company dashboard routes guarded via Next.js 16 proxy pattern (`src/proxy.ts`)
+
+---
+
+## Project Preview
+
+Swiftly connects customers with local courier companies through a fast, anonymous comparison flow. Choose a delivery category, enter your pickup location, and instantly see estimated fees, delivery times, and coverage for every available company. An AI-powered recommendation highlights the best option with a concise natural-language explanation. Customers can submit a delivery request directly to their chosen company with no account required. Companies manage incoming requests, pricing, and availability through an authenticated dashboard.
 
 ---
 
 ## Screenshots
 
-> Add screenshots here once deployed to a live environment.
+> Placeholder references — add actual screenshots to `docs/screenshots/` once deployed to a live environment.
 
-### Landing Page
+![Landing Page](docs/screenshots/landing-page.png)
 
-```
-[Screenshot: Hero section with category cards, how-it-works steps, and partner companies]
-```
+*Hero section with category cards, how-it-works steps, and partner companies.*
 
-### Comparison Page
+![Comparison Page](docs/screenshots/comparison-page.png)
 
-```
-[Screenshot: Category selector, pickup/destination inputs, comparison cards grid, AI recommendation badge]
-```
+*Category selector, pickup/destination inputs, comparison cards grid, AI recommendation badge.*
 
-### AI Recommendation
+![AI Recommendation](docs/screenshots/ai-recommendation.png)
 
-```
-[Screenshot: Expanded recommendation card showing Gemini-generated explanation with reason badges]
-```
+*Expanded recommendation card showing Gemini-generated explanation with reason badges.*
 
-### Company Dashboard
+![Company Dashboard](docs/screenshots/company-dashboard.png)
 
-```
-[Screenshot: Stats cards (Today's Requests, Pending, Completed), availability toggle, recent requests table]
-```
+*Stats cards (Today's Requests, Pending, Completed), availability toggle, recent requests table.*
 
-### Company Login
+![Company Login](docs/screenshots/company-login.png)
 
-```
-[Screenshot: Split-screen login page with brand illustration and email/password form]
-```
+*Split-screen login page with brand illustration and email/password form.*
 
 ---
 
@@ -141,49 +172,55 @@ Swiftly is a **marketplace**, not a delivery service. It connects customers with
 
 | Technology | Why It Was Chosen |
 |---|---|
-| **Next.js 16** (App Router) | React framework with server components, API routes, and Turbopack for fast development. App Router route groups match our page structure naturally. |
-| **TypeScript** | Type safety across the full stack — database queries, API responses, component props, and Zod schemas share consistent types. |
+| **Next.js 16** (App Router) | React framework with server components, API routes, and Turbopack for fast development. App Router route groups match the page structure naturally. |
+| **TypeScript 5** | Type safety across the full stack — database queries, API responses, component props, and Zod schemas share consistent types. |
 | **Tailwind CSS v4** | Utility-first CSS with the new `@theme inline` system. Zero runtime, small bundles, and rapid responsive design. |
-| **shadcn/ui** (base-nova) | Copy-paste UI components built on `@base-ui/react` and `@radix-ui/react`. Accessible, unstyled primitives wrapped with Tailwind — no npm dependency on pre-built components. |
+| **shadcn/ui** (base-nova) | Copy-paste UI components built on `@base-ui/react`. Accessible, unstyled primitives wrapped with Tailwind — no npm dependency on pre-built components. |
 | **Supabase** | PostgreSQL database with built-in authentication. The same platform handles schema, auth, and API queries. Free tier is generous for an MVP. |
 | **Gemini API** (`gemini-2.0-flash`) | Fast, cost-effective LLM for generating natural-language recommendation explanations. Called only after all calculations are done server-side. |
+| **@google/generative-ai** | Official Google SDK for the Gemini API. Used in `src/lib/gemini.ts` to send prompts and receive explanations. |
 | **React Hook Form + Zod** | Performant form handling with schema-based validation. Reduces re-renders and keeps validation logic in one place. |
 | **Framer Motion** | Lightweight animation library for page transitions, hover effects, and micro-interactions. |
 | **Lucide React** | Consistent, tree-shakeable icon set with first-class React support. |
+| **class-variance-authority** | Utility for managing component variant classes, used by shadcn/ui components. |
+| **tailwind-merge + clsx** | Class name merging utilities for combining Tailwind classes safely. |
 
 ---
 
 ## System Architecture
 
-```
-┌──────────┐
-│ Customer │  (No account required)
-└────┬─────┘
-     │
-     ▼
-┌──────────────────────┐
-│  Next.js 16          │
-│  Frontend            │
-│  (App Router)        │
-└──────┬───────────────┘
-       │
-       ▼
-┌──────────────────────┐
-│  Next.js API Routes  │
-│  (10 route handlers) │
-└───┬──────────────────┘
-    │
-    ├────────────────┐
-    │                │
-    ▼                ▼
-┌──────────┐   ┌──────────┐
-│ Supabase │   │ Gemini   │
-│ DB +     │   │ 2.0      │
-│ Auth     │   │ Flash    │
-└──────────┘   └──────────┘
+```mermaid
+flowchart LR
+    Customer["👤 Customer<br/>(No account required)"]
+    Company["🏢 Company<br/>(Dashboard login)"]
+    Frontend["🌐 Next.js 16 App Router<br/>(React Server Components)"]
+    API["⚙️ API Routes<br/>(10 route handlers)"]
+    Supabase["🗄️ Supabase<br/>(PostgreSQL + Auth)"]
+    Gemini["🤖 Gemini 2.0 Flash<br/>(AI explanations)"]
+
+    Customer --> Frontend
+    Company --> Frontend
+    Frontend --> API
+    API --> Supabase
+    API --> Gemini
 ```
 
 The frontend communicates exclusively with Next.js API routes. API routes query Supabase for pricing, coverage, and company data. The recommendation route calls Gemini only for natural-language explanation — scoring and selection are computed server-side.
+
+**API route inventory (10 files):**
+
+| Route | Methods | Purpose |
+|---|---|---|
+| `/api/auth/login` | POST | Company login with auto-provisioning |
+| `/api/auth/logout` | POST | Session sign-out |
+| `/api/companies` | GET | List all companies |
+| `/api/compare` | POST | Compare pricing across companies |
+| `/api/recommend` | POST | Score + Gemini explanation |
+| `/api/request` | POST | Submit a delivery request |
+| `/api/company/coverage` | GET, POST, DELETE | Manage coverage areas |
+| `/api/company/pricing` | GET, PATCH | Manage pricing per category |
+| `/api/company/requests` | GET, PATCH | Manage delivery requests |
+| `/api/company/status` | PATCH | Toggle company availability |
 
 ---
 
@@ -216,37 +253,74 @@ When a customer initiates a comparison, the backend:
 
 1. Fetches all pricing rows for the selected category, joined with company data
 2. Calculates estimated fees and times using:
-
-```
-Estimated Fee   = Base Fee + (Distance × Price per km)
-Estimated Time  = Base Minutes + (Distance × 2)
-```
-
+   - **Estimated Fee** = Base Fee + (Distance × Price per km)
+   - **Estimated Time** = Base Minutes + (Distance × 2)
 3. Filters to available companies only
 4. Sorts results by estimated fee ascending
 
-Distance is currently simulated (randomized 2–7 km). A production version would use the Google Maps Distance Matrix API for accurate calculations.
+> **Note:** Distance is currently simulated (randomized 2–7 km via `src/lib/distance.ts`). A production version would use the Google Maps Distance Matrix API for accurate calculations.
 
 ---
 
 ## AI Recommendation Engine
 
-The AI recommendation follows a strict separation of concerns:
+The recommendation system follows a strict separation of concerns: **deterministic scoring** runs on every request, while **Gemini generates only the explanation text**.
 
-**Backend calculation (always runs):**
-- Scores each company using a weighted formula
-- Fee score (40% weight) — normalized across all results
-- Time score (30% weight) — normalized across all results
-- Coverage bonus (20% weight) — awarded if the company covers the customer's area
-- Verification bonus (10% weight) — awarded if the company is verified
+### Scoring Formula
 
-**Gemini explanation (optional):**
-- The highest-scoring company is selected algorithmically
-- Gemini 2.0 Flash receives the best company and all result data
-- It generates 2–3 sentences explaining *why* this company is the best option
-- If the Gemini API key is not configured, a template explanation is used instead
+Scoring is computed server-side in `src/app/api/recommend/route.ts` for every company in the comparison set:
 
-**The backend calculates all pricing and scoring. Gemini only explains the recommendation.**
+| Factor | Weight | Calculation |
+|---|---|---|
+| Fee score | 40% | `1 - (fee / maxFee)` — normalized across all results |
+| Time score | 30% | `1 - (time / maxTime)` — normalized across all results |
+| Coverage bonus | 20% | `+0.2` if the company covers the customer's area |
+| Verification bonus | 10% | `+0.1` if the company is verified |
+
+**Total Score** = `(feeScore × 0.4) + (timeScore × 0.3) + coverageBonus + verifiedBonus`
+
+The company with the highest total score is selected as the recommendation. Reason badges (e.g., "Lowest Estimated Cost", "Fastest Estimated Delivery", "Covers Your Area") are also assigned based on which factors the winner excels at.
+
+### Gemini Integration
+
+- **What Gemini does:** Generates a concise 2–3 sentence natural-language explanation for why the highest-scoring company was chosen.
+- **What Gemini does NOT do:** It does not compute scores, select the winner, or invent pricing data. All of that is deterministic server-side logic.
+- **When Gemini is called:** Only after scoring is complete and a winner is selected.
+- **What is sent to Gemini:** The best company's name, fee, and time, plus the full list of all compared companies with their data.
+- **Hallucination guard:** Gemini is instructed to base its explanation only on the supplied data. The prompt explicitly requests factual output referencing price, speed, and coverage metrics.
+- **Fallback behavior:**
+  - If `GEMINI_API_KEY` is not set (`src/lib/gemini.ts:10-13`): a template explanation is returned immediately without calling the API.
+  - If the API call fails or returns a response shorter than 20 characters (`src/lib/gemini.ts:43-46`): a fallback template explanation is used.
+
+### AI System Prompt
+
+The Gemini model receives a **system instruction** and a **user prompt** on every recommendation request.
+
+**System instruction** (from `src/lib/gemini.ts:18-19`):
+
+```
+You are Swiftly's AI recommendation engine. You analyze delivery company
+comparisons and explain recommendations concisely. Never mention you are
+an AI. Write naturally as if giving advice.
+```
+
+**User prompt template** (from `src/lib/gemini.ts:29-36`):
+
+```
+Based on this comparison, explain in 2-3 sentences why [company name] is the best choice:
+
+Best: [company name] - $[fee] - [time]min
+
+All options:
+1. [company A]: $[fee], [time]min, [covers area/limited coverage], [verified/unverified]
+2. [company B]: $[fee], [time]min, [covers area/limited coverage], [verified/unverified]
+...
+
+Write 2-3 concise sentences explaining the recommendation. Mention specific advantages
+like price, speed, or coverage. No greetings, no JSON.
+```
+
+**Model:** `gemini-2.0-flash`
 
 ---
 
@@ -261,8 +335,9 @@ The AI recommendation follows a strict separation of concerns:
 - Delivery request submission with confirmation page
 - Company dashboard: stats, request management, pricing editor, coverage area CRUD, availability toggle
 - Supabase authentication with auto-provisioning for demo accounts
-- Route protection via Next.js 16 proxy pattern
+- Route protection via Next.js 16 proxy pattern (`src/proxy.ts`)
 - Responsive, mobile-first design with WCAG AA accessibility
+- Zod validation on all API inputs
 
 ### What Belongs to the Production Roadmap
 
@@ -285,13 +360,13 @@ The AI recommendation follows a strict separation of concerns:
 
 - Node.js 20.9+
 - npm 10+
-- A Supabase project (free tier)
-- A Google Gemini API key (free tier, optional)
+- A Supabase project ([free tier](https://supabase.com))
+- A Google Gemini API key ([free tier](https://ai.google.dev/), optional)
 
 ### Installation
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/AsmaKhanCodes/swiftly.git
 cd swiftly
 npm install
 ```
@@ -317,7 +392,7 @@ cp .env.local.example .env.local
 2. Open the SQL Editor and run `supabase/schema.sql` to create all tables, triggers, and indexes.
 3. Run `supabase/seed.sql` to populate demo companies, pricing, coverage areas, and company user records.
 
-**Important:** The `seed.sql` file inserts company user records into the `company_users` table for reference, but it does **not** create Supabase Authentication users. Authentication accounts are created automatically on first login via the `/api/auth/login` route, which uses the `SUPABASE_SERVICE_ROLE_KEY` to provision users through the Supabase Admin API.
+> **Important:** The `seed.sql` file inserts company user records into the `company_users` table for reference, but it does **not** create Supabase Authentication users. Authentication accounts are created automatically on first login via the `/api/auth/login` route, which uses the `SUPABASE_SERVICE_ROLE_KEY` to provision users through the Supabase Admin API.
 
 ### Demo Credentials
 
@@ -351,25 +426,9 @@ npm start
 
 ## Deployment
 
-The application is designed for deployment on Vercel. Set the environment variables listed above in your Vercel project settings.
+The application is designed for deployment on [Vercel](https://vercel.com). Set the environment variables listed above in your Vercel project settings.
 
-**Live Application:** `https://swiftly-amber.vercel.app/`
-
----
-
-## Roadmap
-
-- [ ] **Company self-registration** — Onboarding flow with public signup for delivery businesses
-- [ ] **WhatsApp Business API** — Send request submissions and status updates via WhatsApp
-- [ ] **Live rider availability** — Real-time toggle per rider, not just per company
-- [ ] **Google Maps Distance Matrix API** — Accurate distance and duration for fee calculation
-- [ ] **Push notifications** — Alert companies of new requests and customers of status changes
-- [ ] **Online payments** — Pay per request with escrow-style release on completion
-- [ ] **Analytics dashboard** — Request volume, revenue trends, peak hours, customer locations
-- [ ] **Customer accounts** — Request history, saved addresses, favorite companies
-- [ ] **Reviews and ratings** — Post-delivery feedback visible on company profiles
-- [ ] **Multi-language support** — i18n for customer and company interfaces
-- [ ] **GPS live tracking** — Real-time rider location sharing during delivery
+**Live Application:** [https://swiftly-amber.vercel.app/](https://swiftly-amber.vercel.app/)
 
 ---
 
@@ -391,8 +450,10 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 - **Supabase** — PostgreSQL database, authentication, and hosting infrastructure
 - **Google Gemini** — AI language model for recommendation explanations
 - **shadcn/ui** — Accessible component system and design patterns
+- **@base-ui/react** — Unstyled, accessible UI primitives
 - **Framer Motion** — Motion library for React animations
 - **Lucide** — Open-source icon set
-- **Radix UI** — Unstyled, accessible UI primitives
 - **React Hook Form** — Performant form management
 - **Zod** — TypeScript-first schema validation
+- **class-variance-authority** — Component variant utilities
+- **tailwind-merge + clsx** — Class name merging
